@@ -17,15 +17,15 @@ class Television:
             self.__status = True
 
     def mute(self):
-        global prev_volume
         if self.__status:
             if self.__muted:
                 self.__muted = False
-                self.__volume = prev_volume
+                self.__volume = self.__previous_volume
             else:
-                prev_volume = self.__volume
+                self.__previous_volume = self.__volume
                 self.__muted = True
                 self.__volume = Television.MIN_VOLUME
+            return self.__muted
 
     def channel_up(self):
         if self.__status:
@@ -43,17 +43,19 @@ class Television:
 
     def volume_up(self):
         if self.__status:
-            self.mute()
+            if self.__muted:
+                self.mute()
             if self.__volume == Television.MAX_VOLUME:
-                pass
+                self.__volume = Television.MAX_VOLUME
             else:
                 self.__volume += 1
 
     def volume_down(self):
         if self.__status:
-            self.mute()
+            if self.__muted:
+                self.mute()
             if self.__volume == Television.MIN_VOLUME:
-                pass
+                self.__volume = Television.MIN_VOLUME
             else:
                 self.__volume -= 1
 
